@@ -12,10 +12,14 @@ before(done => {
 });
 
 // Hook is execute before any other test on the test suite
+// Delete all the records before each test
 beforeEach(done => {
-  // Delete all the records before each test
-  mongoose.connection.collections.users.drop(() => {
-    // Ready to run the next test!
-    done();
+  const { users, comments, blogposts } = mongoose.connection.collections;
+  users.drop(() => {
+    comments.drop(() => {
+      blogposts.drop(() => {
+        done();
+      });
+    });
   });
 });
